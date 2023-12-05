@@ -6,15 +6,22 @@ import jakarta.validation.Validator;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.Set;
 
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
+    ValidationAutoConfiguration.class
+})
 class UserRegistrationRequestTest {
 
   private Validator validator;
 
+  @Autowired
+  LocalValidatorFactoryBean localValidatorFactoryBean;
   static UserRegistrationRequest validRequest = new UserRegistrationRequest(
       "omar",
       "omar@email.com",
@@ -24,8 +31,6 @@ class UserRegistrationRequestTest {
 
   @BeforeEach
   void setUp() {
-    LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-    localValidatorFactoryBean.afterPropertiesSet();
     this.validator = localValidatorFactoryBean.getValidator();
   }
 
